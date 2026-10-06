@@ -2,9 +2,11 @@ package cl.bitss.Carro.controller;
 import cl.bitss.Carro.model.Carrito;
 import cl.bitss.Carro.service.CarritoService;
 import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/carrito")
@@ -21,29 +23,23 @@ public class CarritoController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Carrito> obtenerPorId(@PathVariable Long id) {
-        return service.obtenerPorId(id)
-                .map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.notFound().build());
+        return ResponseEntity.ok(service.obtenerPorId(id));
     }
 
     @PostMapping
     public ResponseEntity<Carrito> crear(@Valid @RequestBody Carrito carrito) {
-        return ResponseEntity.ok(service.crear(carrito));
+        return ResponseEntity.status(HttpStatus.CREATED).body(service.crear(carrito));
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<Carrito> actualizar(@PathVariable Long id, @Valid @RequestBody Carrito carrito) {
-        return service.actualizar(id, carrito)
-                .map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.notFound().build());
+        return ResponseEntity.ok(service.actualizar(id, carrito));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> eliminar(@PathVariable Long id) {
-        if (service.eliminar(id)) {
-            return ResponseEntity.noContent().build();
-        }
-        return ResponseEntity.notFound().build();
+    public ResponseEntity<Map<String, Object>> eliminar(@PathVariable Long id) {
+        service.eliminar(id);
+        return ResponseEntity.ok(Map.of("mensaje", "Juego eliminado del carrito", "id", id));
     }
 
     @GetMapping("/usuario/{usuarioId}")

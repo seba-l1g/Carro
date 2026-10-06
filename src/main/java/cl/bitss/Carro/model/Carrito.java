@@ -3,7 +3,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.PositiveOrZero;
@@ -23,21 +22,23 @@ public class Carrito {
     @Positive(message = "El videojuegoId debe ser mayor que 0")
     private Long videojuegoId;
 
-    @NotBlank(message = "El nombre del videojuego es obligatorio")
     @Size(max = 100, message = "El nombre no puede superar los 100 caracteres")
     private String nombreVideojuego;
 
-    @NotNull(message = "El precio es obligatorio")
+    @Size(max = 50, message = "La categoria no puede superar los 50 caracteres")
+    private String categoria;
+
     @PositiveOrZero(message = "El precio no puede ser negativo")
     private Double precio;
 
     public Carrito() {
     }
 
-    public Carrito(Long usuarioId, Long videojuegoId, String nombreVideojuego, Double precio) {
+    public Carrito(Long usuarioId, Long videojuegoId, String nombreVideojuego, String categoria, Double precio) {
         this.usuarioId = usuarioId;
         this.videojuegoId = videojuegoId;
         this.nombreVideojuego = nombreVideojuego;
+        this.categoria = categoria;
         this.precio = precio;
     }
 
@@ -71,6 +72,14 @@ public class Carrito {
 
     public void setNombreVideojuego(String nombreVideojuego) {
         this.nombreVideojuego = nombreVideojuego;
+    }
+
+    public String getCategoria() {
+        return categoria;
+    }
+
+    public void setCategoria(String categoria) {
+        this.categoria = categoria;
     }
 
     public Double getPrecio() {
