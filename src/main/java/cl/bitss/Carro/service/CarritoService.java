@@ -1,4 +1,5 @@
 package cl.bitss.Carro.service;
+
 import cl.bitss.Carro.dto.UsuarioDTO;
 import cl.bitss.Carro.dto.VideojuegoDTO;
 import cl.bitss.Carro.exception.BusinessException;
@@ -10,12 +11,17 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CarritoService {
+
     private final CarritoRepository repository;
+
     private final WebClient clientUsuarios = WebClient.builder().baseUrl("http://localhost:8081").build();
+
     private final WebClient clientCatalogo = WebClient.builder().baseUrl("http://localhost:8082").build();
+
     public CarritoService(CarritoRepository repository) {
         this.repository = repository;
     }
@@ -54,6 +60,7 @@ public class CarritoService {
     @Transactional
     public Carrito actualizar(Long id, Carrito datos) {
         Carrito carrito = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Carrito no encontrado con ID: " + id));
+
         clientUsuarios.get().uri("/usuarios/" + datos.getUsuarioId()).retrieve()
                 .onStatus(status -> status.is4xxClientError(), response -> Mono.error(new BusinessException("El usuario indicado no existe")))
                 .onStatus(status -> status.is5xxServerError(), response -> Mono.error(new BusinessException("Error en servicio Usuarios"))).bodyToMono(UsuarioDTO.class).block();
