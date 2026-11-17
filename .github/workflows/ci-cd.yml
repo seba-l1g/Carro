@@ -47,5 +47,5 @@ jobs:
             \"sudo docker pull $REGISTRY/$REPO:$IMAGE_TAG\",
             \"sudo docker stop carro || true\",
             \"sudo docker rm carro || true\",
-            \"sudo docker run -d --name carro -p 8082:8082 $REGISTRY/$REPO:$IMAGE_TAG\"
+            \"sudo docker run -d --name carro -p 8083:8083 $REGISTRY/$REPO:$IMAGE_TAG\"
             ]"
